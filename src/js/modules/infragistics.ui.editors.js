@@ -2914,7 +2914,7 @@
 							selection = this._getSelection(this._editorInput[ 0 ]);
 							if (selection.start === selection.end) {
 								e.preventDefault();
-								e.stopPropagation();
+								//e.stopPropagation();
 								this._sendNotification("warning",
 									$.ig.util.stringFormat($.ig.Editor.locale.maxLengthWarningMsg,
 										this.options.maxLength));

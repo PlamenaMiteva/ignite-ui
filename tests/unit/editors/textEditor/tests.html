@@ -1568,11 +1568,18 @@
 		
 		var testId = 'maxLength is respected';
 		test(testId, 1, function () {
-			var $editor;
+			var $editor, $input;
 
 			$editor = $('<input id="maxLengthTest"/>').appendTo("#testBedContainer").igTextEditor({ maxLength : 3 });
-			typeInInput("abc s",  $editor.igTextEditor("field"));
-			ok($('#maxLengthTest').parents().hasClass("ui-ignotify-warn"), "The notifier is not shown");
+			$input = $('#maxLengthTest');
+			
+			$.ig.TestUtil.keyInteraction(65, $input, false);
+			$.ig.TestUtil.keyInteraction(66, $input, false);
+			$.ig.TestUtil.keyInteraction(67, $input, false);
+			$.ig.TestUtil.keyInteraction(32, $input, false);
+			$.ig.TestUtil.keyInteraction(83, $input, false);
+			
+			ok($input.parents().hasClass("ui-ignotify-warn"), "The notifier is not shown");
 			$editor.remove();
 		});
 		
