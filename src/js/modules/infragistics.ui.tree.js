@@ -2109,7 +2109,8 @@
 					containment: dragAndDropSettings.containment,
 					start: function (event, ui) {
 						var node = self.nodeFromElement($(this)), noCancel;
-						noCancel = self._triggerDragStart(event, ui, node.element);
+						// P.M. June 6th, 2019 Bug #263216 Pass the tree node instead of its element.
+						noCancel = self._triggerDragStart(event, ui, node);
 						if (noCancel) {
 							self._originalHelper.html = ui.helper.html();
 
@@ -4689,10 +4690,13 @@
 			this._trigger(this.events.rendered, null, args);
 		},
 		_triggerDragStart: function (event, ui, node) {
-			var obj = this._constructNodeObject(node),
-				args = $.extend(false, obj, ui);
+			// P.M. June 6th, 2019 Bug #263216 
+			// When dragging a node with children, nested data is passed by reference. We need to get the event args in case a deep copy of the sublevel data has been made in the event handler.
+			var	args = $.extend({}, node, ui);
 
-			return this._trigger(this.events.dragStart, event, args);
+			var result = this._trigger(this.events.dragStart, event, args);
+			node.data = args.data;
+			return result;
 		},
 		_triggerDrag: function (event, ui, node) {
 			var obj = this._constructNodeObject(node),
